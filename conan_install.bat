@@ -1,10 +1,13 @@
+@echo off
 pushd "%~dp0"
 if not exist build (md build)
-if not exist build/conan (md build/conan)
 docker run ^
 -v "%CD%:/src" ^
--v "%CD%/build/conan:/root/.conan/data" ^
+-v "cache:/root/.conan/data" ^
 -w /src/build ^
---rm questionbuilder ^
+--name questioncontainer ^
+questionimage ^
 conan install .. --build=missing
+docker rm questioncontainer
 popd
+echo done installing 
